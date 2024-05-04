@@ -1,37 +1,22 @@
-from typing import List, Optional
+from fastapi import FastAPI
+from sqladmin import Admin
 
-from fastapi import Depends, FastAPI, HTTPException
-from starlette.responses import RedirectResponse
-from starlette.status import HTTP_201_CREATED
-
-from api.repository import Todo, TodoFilter, TodoRepository, create_todo_repository
+import api.purchased_items
+import api.purchase
+import api.products
+import api.users
+from .auth import AdminAuth
+from .db import get_engine
+from .admin.products import ProductAdmin
+from .admin.purchases import PurchaseAdmin
+from .settings import settings
 
 app = FastAPI(swagger_ui_parameters={"tryItOutEnabled": True})
+app.include_router(api.purchased_items.router)
+app.include_router(api.purchase.router)
+app.include_router(api.products.router)
+app.include_router(api.users.router)
 
-
-@app.get("/")
-async def root():
-    return RedirectResponse(app.docs_url)
-
-
-@app.post("/create/{key}", status_code=HTTP_201_CREATED)
-def create(key: str, value: str, todo_repository: TodoRepository = Depends(create_todo_repository)):
-    with todo_repository as repo:
-        repo.save(Todo(key=key, value=value))
-
-
-@app.get("/get/{key}", response_model=Optional[Todo])
-def get(key: str, todo_repository: TodoRepository = Depends(create_todo_repository)):
-    with todo_repository as repo:
-        todo = repo.get_by_key(key)
-
-        if not todo:
-            raise HTTPException(status_code=404, detail="Todo not found")
-
-        return todo
-
-
-@app.get("/find", response_model=List[Todo])
-def find(todo_filter: TodoFilter = Depends(), todo_repository: TodoRepository = Depends(create_todo_repository)):
-    with todo_repository as repo:
-        return repo.get(todo_filter)
+admin = Admin(app, get_engine(), authentication_backend=AdminAuth(secret_key=settings.secret_key))
+admin.add_view(ProductAdmin)
+admin.add_view(PurchaseAdmin)

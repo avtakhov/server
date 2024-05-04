@@ -1,24 +1,25 @@
 [tool.poetry]
 name = "fastapi-template"
-version = "1.2.0"
+version = "1.4.0"
 
-authors = ["Donny Peeters <donny.peeters@hotmail.com>"]
-maintainers = ["Donny Peeters <donny.peeters@hotmail.com>"]
-description = "A FastAPI template."
-readme = "README.md"
-homepage = "https://github.com/BiteStreams/fastapi-template"
-repository = "https://github.com/BiteStreams/fastapi-template"
-keywords = ["FastAPI", "Template"]
+authors = ["Avtakhov <avtahovfarit@gmail.com>"]
+maintainers = ["Avtakhov <avtahovfarit@gmail.com>"]
+description = "Dota2 custom game backend"
+keywords = ["FastAPI"]
 
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.11"
 requests = "^2.31.0"
 fastapi = "^0.109.1"
 uvicorn = "^0.18.3"
 SQLAlchemy = "^1.4.42"
 alembic = "^1.8.1"
 psycopg2-binary = "^2.9.9"
+sqladmin = "*"
+python-jose="*"
+pydantic-settings="*"
+itsdangerous="*"
 
 [tool.poetry.group.dev]
 optional = true

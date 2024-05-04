@@ -12,8 +12,9 @@ services:
     volumes:
       - ./api:/home/user/api
     environment:
-      - DB_STRING=postgresql://postgres:test@db:5432/postgres
-
+      - DB_STRING=${DATABASE_URL}
+    env_file:
+      - ./.env
   db:
     image: postgres:14.5
     ports:
@@ -21,7 +22,9 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD=test
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    env_file:
+      - ./.env
 
 volumes:
   postgres-data:

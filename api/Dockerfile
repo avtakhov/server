@@ -1,4 +1,4 @@
-FROM python:3.9-slim as base
+FROM python:3.11-slim as base
 
 ARG PROJECT=api
 
@@ -23,7 +23,7 @@ FROM base as dev
 
 COPY --chown=user:user ./$PROJECT /home/user/$PROJECT
 
-CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "5000", "--reload"]
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "5000", "--workers", "4"]
 
 
 FROM base as test
@@ -34,4 +34,3 @@ RUN mkdir /home/user/.mypy_cache && chown -R user:user /home/user/.mypy_cache
 
 # Default target.
 FROM dev
-
