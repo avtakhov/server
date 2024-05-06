@@ -7,7 +7,10 @@ from api.models.products import Product
 
 
 def filter_json(data):
-    return json.loads(data) if data else None
+    if isinstance(data, dict):
+        return json.dumps(data)
+    else:
+        return json.loads(data) if data else None
 
 
 class JSONField(wtforms.TextAreaField):

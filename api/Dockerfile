@@ -22,9 +22,9 @@ RUN --mount=type=cache,target=/root/.cache poetry install
 FROM base as dev
 
 COPY --chown=user:user ./$PROJECT /home/user/$PROJECT
+COPY --chown=user:user ./env /home/user/env
 
-CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "5000", "--workers", "4"]
-
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "5000", "--workers", "4", "--ssl-keyfile", "/home/user/env/ssl.pem", "--ssl-certfile", "/home/user/env/ssl.crt"]
 
 FROM base as test
 
