@@ -3,17 +3,15 @@ import datetime
 import fastapi
 from sqladmin.authentication import AuthenticationBackend
 from jose import jwt
-from fastapi.responses import RedirectResponse
 
 from .settings import settings
 
 
-def check_authorization(authorization: str = fastapi.Header(None)):
-    if authorization is None:
+def check_authorization(api_key: str = fastapi.Header(None)):
+    if api_key != settings.api_key:
         raise fastapi.HTTPException(status_code=401, detail="Unauthorized")
 
-    print(authorization)
-    return authorization
+    return api_key
 
 
 def create_jwt_token(data: dict, expiration_delta: datetime.timedelta) -> str:

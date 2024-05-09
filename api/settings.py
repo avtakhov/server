@@ -10,9 +10,10 @@ class Settings(BaseSettings):
 
     # AUTH
     secret_key: str
+    algorithm: str = "HS256"
 
     sqladmin_password: str
-    algorithm: str = "HS256"
+    api_key: str
 
     class Config:
         env_file = ".env"
